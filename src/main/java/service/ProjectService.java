@@ -1,13 +1,17 @@
 package service;
 
 import dao.ProjectRepository;
-import entity.Project;
-import entity.ProjectStatus;
+import entity.*;
 import exception.NotFoundException;
+import model.DeveloperModel;
 
+import javax.swing.plaf.nimbus.State;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ProjectService implements ProjectRepository {
@@ -19,10 +23,14 @@ public class ProjectService implements ProjectRepository {
         this.customerService = customerService;
     }
 
+    public Statement state() throws SQLException {
+        return connection.createStatement();
+    }
+
     @Override
     public void createNewProject(Project project) throws SQLException {
 
-        connection.createStatement().execute("INSERT INTO project_entity (cost, name , deadline, status) VALUES " +
+        state().execute("INSERT INTO project_entity (cost, name , deadline, status) VALUES " +
                 "(" +
                 project.getCost() +  ","
                 + "'" + project.getName() + "',"
@@ -30,25 +38,19 @@ public class ProjectService implements ProjectRepository {
                 + "'" + project.getStatus().name() + "');");
 
         long projectId = getProjectByName(project.getName()).getId();
-        connection.createStatement().execute("INSERT INTO customer_projects (projectId, customerId) VALUES ("
+        state().execute("INSERT INTO customer_projects (projectId, customerId) VALUES ("
                 + projectId + ", " + project.getCustomer().getId() + ")");
     }
 
     @Override
-    public void closeProject(long id, ProjectStatus status) throws SQLException {
-
-        connection.createStatement().execute("update project_entity set status = "+ status +" where id = " + id);
-    }
-
-    @Override
-    public void addDevelopersToProject() throws SQLException {
-
+    public void setProjectStatus(long id, ProjectStatus status) throws SQLException {
+        state().execute("update project_entity set status = "+ status +" where id = " + id);
     }
 
     @Override
     public Project getProjectByName(String name) throws SQLException {
         Project project = new Project();
-        try(ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM project_entity where name = '" + name + "'")) {
+        try(ResultSet resultSet = state().executeQuery("SELECT * FROM project_entity where name = '" + name + "'")) {
             while (resultSet.next()) {
                 project.setId(resultSet.getLong("id"));
                 project.setCost(resultSet.getBigDecimal("cost"));
@@ -64,7 +66,7 @@ public class ProjectService implements ProjectRepository {
     public Project getProjectById(long id) throws SQLException {
         Project project = new Project();
 
-        try(ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM project_entity where id = " + id)) {
+        try(ResultSet resultSet = state().executeQuery("SELECT * FROM project_entity where id = " + id)) {
             while (resultSet.next()) {
                 project.setId(resultSet.getLong("id"));
                 project.setCost(resultSet.getBigDecimal("cost"));
@@ -80,4 +82,23 @@ public class ProjectService implements ProjectRepository {
         return project;
     }
 
+
+    public List<DeveloperModel> getAllDevModelFromProject(long projectId) throws SQLException{
+        List<DeveloperModel> developerModelList = new ArrayList<>();
+        try(ResultSet resultSet = state().executeQuery("select * from developer_projects INNER " +
+                "JOIN developer_entity ON projectId" +
+                " = + " + projectId +"where projectId = " + projectId
+        )) {
+            while (resultSet.next()) {
+                developerModelList.add(new DeveloperModel(
+                        resultSet.getLong("id"),
+                        resultSet.getString("mainqualification"),
+                        resultSet.getString("name"),
+                        DeveloperStatus.valueOf(resultSet.getString("status")),
+                        Qualities.valueOf(resultSet.getString("quality"))
+                ));
+            }
+        }
+        return developerModelList;
+    }
 }

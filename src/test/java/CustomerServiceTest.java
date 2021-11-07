@@ -42,8 +42,8 @@ public class CustomerServiceTest {
     }
 
     @Test
-    public void findByName(){
-
+    public void findByName() throws SQLException {
+        System.out.println(customerService.getCustomerByName("Oleg"));
     }
 
     @Test

@@ -17,8 +17,6 @@ public class CustomerModel {
         this.name = name;
     }
 
-
-
     public long getId() {
         return id;
     }

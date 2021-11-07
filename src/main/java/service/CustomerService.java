@@ -89,7 +89,6 @@ public class CustomerService implements CustomerRepository {
 
     @Override
     public List<Project> getCustomerProjects(long id) throws SQLException {
-
         List<Project> projectList = new ArrayList<>();
         try(ResultSet resultSet = state().executeQuery("select * from customer_projects INNER JOIN project_entity ON customerId = " + id + " where project_entity.id = projectId");){
             while(resultSet.next()){

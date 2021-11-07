@@ -45,4 +45,9 @@ public class ProjectServiceTest {
         System.out.println(projectService.getProjectById(1));
     }
 
+    @Test
+    public void getAllDevs() throws SQLException {
+        System.out.println(projectService.getAllDevModelFromProject(1));
+    }
+
 }
