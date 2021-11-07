@@ -8,8 +8,9 @@ public class Customer {
     private String name;
     private List<Project> projectList;
 
-    public Customer(long id, String name){
-        this.id = id;
+    public Customer(){}
+
+    public Customer(String name){
         this.name = name;
     }
 
@@ -35,6 +36,11 @@ public class Customer {
 
     public void setProjectList(List<Project> projectList) {
         this.projectList = projectList;
+    }
+
+    public String toString(){
+
+        return this.id + " " + this.name + "\n" + projectList;
     }
 }
 

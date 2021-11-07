@@ -1,21 +1,28 @@
 package entity;
 
+import java.util.List;
+
 public class Developer {
 
     private long id;
     private String mainQualification;
     private String name;
-    private Status status;
+    private DeveloperStatus status;
     private Qualities quality;
-    private Project project;
+    private List<Project> projects;
 
-    private boolean alreadyInProject;
-
-    public Developer(long id, String mainQualification, String name, Qualities quality){
-        this.id = id;
+    public Developer(String mainQualification, String name, Qualities quality){
         this.mainQualification = mainQualification;
         this.name = name;
         this.quality = quality;
+        status = DeveloperStatus.ACTIVE;
+    }
+
+    public Developer(long id, String mainQualification, String name, Qualities quality, DeveloperStatus status, List<Project> list){
+        this(mainQualification,name,quality);
+        this.status = status;
+        this.id = id;
+        this.projects = list;
     }
 
     public long getId() {
@@ -42,11 +49,11 @@ public class Developer {
         this.name = name;
     }
 
-    public Status getStatus() {
+    public DeveloperStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(DeveloperStatus status) {
         this.status = status;
     }
 
@@ -58,19 +65,11 @@ public class Developer {
         this.quality = quality;
     }
 
-    public Project getProject() {
-        return project;
+    public List<Project> getProjects() {
+        return projects;
     }
 
-    public void setProject(Project project) {
-        this.project = project;
-    }
-
-    public boolean isAlreadyInProject() {
-        return alreadyInProject;
-    }
-
-    public void setAlreadyInProject(boolean alreadyInProject) {
-        this.alreadyInProject = alreadyInProject;
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
     }
 }

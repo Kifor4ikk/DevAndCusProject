@@ -2,5 +2,6 @@ package entity;
 
 public enum ProjectStatus {
     ACTIVE,
-    CLOSED
+    CLOSED,
+    EXPIRED
 }

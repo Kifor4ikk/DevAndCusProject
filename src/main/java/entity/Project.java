@@ -1,8 +1,10 @@
 package entity;
 
+import model.CustomerModel;
+
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Project {
@@ -11,17 +13,26 @@ public class Project {
     private String name;
     private BigDecimal cost;
     private Date deadLine;
-    private Customer customer;
+    private CustomerModel customer;
     private ProjectStatus status;
     private List<Developer> listOfDevelopers;
 
-    public Project(long id, String name, BigDecimal cost, Date deadline, Customer customer){
-        this.id = id;
+    public Project(){}
+
+    public Project(String name, BigDecimal cost, java.sql.Date deadline, CustomerModel customer){
         this.name = name;
         this.cost = cost;
         this.deadLine = deadline;
         this.customer = customer;
         this.listOfDevelopers = new ArrayList<>();
+        status = ProjectStatus.ACTIVE;
+    }
+
+    public Project(long id, String name, BigDecimal cost, java.sql.Date deadline, CustomerModel customer, ProjectStatus projectStatus){
+        this(name,cost,deadline,customer);
+        this.listOfDevelopers = new ArrayList<>();
+        status = projectStatus;
+        this.id = id;
     }
 
     public long getId() {
@@ -48,7 +59,7 @@ public class Project {
         this.cost = cost;
     }
 
-    public Date getDeadLine() {
+    public java.sql.Date getDeadLine() {
         return deadLine;
     }
 
@@ -56,11 +67,11 @@ public class Project {
         this.deadLine = deadLine;
     }
 
-    public Customer getCustomer() {
+    public CustomerModel getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(CustomerModel customer) {
         this.customer = customer;
     }
 
@@ -78,5 +89,16 @@ public class Project {
 
     public void setListOfDevelopers(List<Developer> listOfDevelopers) {
         this.listOfDevelopers = listOfDevelopers;
+    }
+
+    @Override
+    public String toString(){
+
+        return "\n-------------------------------\n" +
+                "#" + this.id + " " + this.name + "\n" +
+                this.cost + " | " + deadLine + "\n" +
+                "STATUS: " + status + "\n" +
+                this.customer + "\n" + listOfDevelopers +
+                "\n-------------------------------\n";
     }
 }

@@ -12,10 +12,10 @@ public class Database {
     private static final String username = "postgres";
     private static final String password = "pass";
 
-    public static Statement connectWithDataBase() throws SQLException, ClassNotFoundException {
+    public static Connection connectWithDataBase() throws SQLException, ClassNotFoundException {
         Connection connection = DriverManager.getConnection(jdbcUrl,username,password);
         System.out.println("Connected!");
-        return connection.createStatement();
+        return connection;
     }
 
 }
