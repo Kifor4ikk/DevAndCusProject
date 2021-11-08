@@ -27,12 +27,12 @@ public class CustomerService implements CustomerRepository {
     }
     @Override
     public void createCustomer(String name) throws SQLException {
-        connection.createStatement().execute("INSERT INTO customer_entity (name) VALUES ('" + name + "')");
+        state().execute("INSERT INTO customer_entity (name) VALUES ('" + name + "')");
     }
 
     @Override
     public void updateCustomer(String name, String newName) throws SQLException {
-        connection.createStatement().execute("UPDATE customer_entity " +
+        state().execute("UPDATE customer_entity " +
                 "SET name = '" + newName + "'" +
                 "WHERE name = '" + name + "'");
     }
@@ -102,7 +102,6 @@ public class CustomerService implements CustomerRepository {
                                 ProjectStatus.valueOf(resultSet.getString("status"))
                         )
                 );
-
             }
         }
         return projectList;
