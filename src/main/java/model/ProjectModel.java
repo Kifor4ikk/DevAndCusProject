@@ -1,41 +1,39 @@
-package entity;
+package model;
 
-import model.CustomerModel;
+import entity.ProjectStatus;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
-public class Project {
-
+public class ProjectModel {
     private long id;
     private String type;
     private BigDecimal cost;
     private Date deadLine;
     private CustomerModel customer;
     private ProjectStatus status;
-    private List<Developer> team;
+    private List<DeveloperModel> team;
     private List<String> tasks;
 
-    public Project(){}
 
-    public Project(String type, BigDecimal cost, java.sql.Date deadline, CustomerModel customer, List<String> tasks){
+    public ProjectModel() { }
+
+    public ProjectModel(long id, String type, BigDecimal cost, Date deadLine,
+                        CustomerModel customer, ProjectStatus status, List<DeveloperModel> listOfDevs) {
+        this.id = id;
         this.type = type;
         this.cost = cost;
-        this.deadLine = deadline;
+        this.deadLine = deadLine;
         this.customer = customer;
-        this.team = new ArrayList<>();
-        this.tasks = tasks;
-        status = ProjectStatus.ACTIVE;
+        this.status = status;
+        this.setTeam(listOfDevs);
     }
 
-    public Project(long id, String type, BigDecimal cost, java.sql.Date deadline, CustomerModel customer,
-                   ProjectStatus projectStatus, List<String> tasks){
-        this(type,cost,deadline,customer,tasks);
-        this.team = new ArrayList<>();
-        status = projectStatus;
-        this.id = id;
+    public ProjectModel(long id, String type, BigDecimal cost, Date deadLine,
+                        CustomerModel customer, ProjectStatus status, List<DeveloperModel> listOfDevs, List<String> tasks) {
+        this(id,type,cost,deadLine,customer,status,listOfDevs);
+        this.tasks = tasks;
     }
 
     public long getId() {
@@ -62,7 +60,7 @@ public class Project {
         this.cost = cost;
     }
 
-    public java.sql.Date getDeadLine() {
+    public Date getDeadLine() {
         return deadLine;
     }
 
@@ -86,20 +84,12 @@ public class Project {
         this.status = status;
     }
 
-    public List<Developer> getTeam() {
+    public List<DeveloperModel> getTeam() {
         return team;
     }
 
-    public void setTeam(List<Developer> team) {
+    public void setTeam(List<DeveloperModel> team) {
         this.team = team;
-    }
-
-    public List<String> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(List<String> tasks) {
-        this.tasks = tasks;
     }
 
     @Override
@@ -109,8 +99,7 @@ public class Project {
                 "#" + this.id + " " + this.type + "\n" +
                 this.cost + " | " + deadLine + "\n" +
                 "STATUS: " + status + "\n" +
-                this.customer + "\n" + team + " \n"
-                + tasks +
+                this.customer + "\n" + team +
                 "\n-------------------------------\n";
     }
 }

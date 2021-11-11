@@ -1,6 +1,9 @@
 package entity;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class Customer {
 
@@ -40,7 +43,8 @@ public class Customer {
 
     public String toString(){
 
-        return this.id + " " + this.name + "\n" + projectList;
+        return  "#" + this.id + " | " + this.name + " |\n|PROJECTS| \n" +
+                projectList.stream().map(project -> project.getType()).collect(Collectors.toList());
     }
 }
 

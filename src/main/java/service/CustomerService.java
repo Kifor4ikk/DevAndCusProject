@@ -6,13 +6,11 @@ import entity.Project;
 import entity.ProjectStatus;
 import exception.NotFoundException;
 import model.CustomerModel;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class CustomerService implements CustomerRepository {
 
@@ -99,7 +97,8 @@ public class CustomerService implements CustomerRepository {
                                 resultSet.getBigDecimal("cost"),
                                 resultSet.getDate("deadLine"),
                                 getCustomerModelById(id),
-                                ProjectStatus.valueOf(resultSet.getString("status"))
+                                ProjectStatus.valueOf(resultSet.getString("status")),
+                                Collections.singletonList(resultSet.getArray("tasks").toString())
                         )
                 );
             }
@@ -116,6 +115,21 @@ public class CustomerService implements CustomerRepository {
             }
             if(customer.getId() == 0){
                 throw new NotFoundException("Customer with current ID not found!");
+            }
+            return customer;
+        }
+    }
+
+    public CustomerModel getCustomerModelByProjectId(long projectId) throws SQLException {
+        CustomerModel customer = new CustomerModel();
+        try(ResultSet resultSet = state().executeQuery("select * from customer_projects INNER JOIN" +
+                " customer_entity ON projectId = "+ projectId +" where projectId = " + projectId)){
+            while (resultSet.next()){
+                customer.setId(resultSet.getLong("id"));
+                customer.setName(resultSet.getString("name"));
+            }
+            if(customer.getId() == 0){
+                throw new NotFoundException("Project with current ID was not found");
             }
             return customer;
         }

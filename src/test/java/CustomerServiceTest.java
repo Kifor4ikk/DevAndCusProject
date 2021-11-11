@@ -3,6 +3,7 @@ import entity.Customer;
 import entity.Project;
 import org.junit.jupiter.api.Test;
 import service.CustomerService;
+import service.ProjectService;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -23,41 +24,42 @@ public class CustomerServiceTest {
         }
     }
 
-    @org.junit.jupiter.api.Test
-    public void test(){
-        System.out.println(new java.util.Date());
-    }
+    /*
+    public List<Project> getCustomerProjects(long id) throws SQLException;
+     */
+
     @Test
-    public void testCreateCustomer() throws SQLException {
-        customerService.createCustomer("Oleg");
+    public void createCustomer() throws SQLException {
+        customerService.createCustomer("AndrewICO");
     }
 
     @Test
-    public void testUpdateCustomer() throws SQLException {
-        customerService.updateCustomer("Oleg","OlegEdited");
-    }
-    @Test
-    public void testFindById() throws SQLException {
-        System.out.println(customerService.getCustomerById(1));
+    public void updateCustomer() throws SQLException {
+        customerService.updateCustomer("AndrewICO", "AndrewSAN ICO");
     }
 
     @Test
-    public void findByName() throws SQLException {
-        System.out.println(customerService.getCustomerByName("Oleg"));
-    }
-
-    @Test
-    public void findAll() throws SQLException {
-        for(Customer customer : customerService.getAllCustomers()){
-            System.out.println("# " + customer);
+    public void getAllCustomers() throws SQLException {
+        for (Customer customer : customerService.getAllCustomers()){
+            System.out.println(customer);
         }
     }
 
     @Test
-    public void findProjects() throws SQLException{
+    public void getCustomerById() throws SQLException{
+        System.out.println(customerService.getCustomerById(1));
+    }
 
-        for (Project project: customerService.getCustomerProjects(1)){
-            System.out.println("# -> " + project.toString());
+    @Test
+    public void getCustomerByName() throws SQLException{
+        System.out.println(customerService.getCustomerByName("AndrewSAN ICO"));
+    }
+
+    @Test
+    public void getCustomerProjects() throws SQLException{
+
+        for(Project project : customerService.getCustomerProjects(1)){
+            System.out.println(project);
         }
     }
 }

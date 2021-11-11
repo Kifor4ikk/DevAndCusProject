@@ -1,5 +1,7 @@
 package entity;
 
+import model.ProjectModel;
+
 import java.util.List;
 
 public class Developer {
@@ -9,7 +11,7 @@ public class Developer {
     private String name;
     private DeveloperStatus status;
     private Qualities quality;
-    private List<Project> projects;
+    private List<ProjectModel> projects;
 
     public Developer(String mainQualification, String name, Qualities quality){
         this.mainQualification = mainQualification;
@@ -18,7 +20,7 @@ public class Developer {
         status = DeveloperStatus.ACTIVE;
     }
 
-    public Developer(long id, String mainQualification, String name, Qualities quality, DeveloperStatus status, List<Project> list){
+    public Developer(long id, String mainQualification, String name, Qualities quality, DeveloperStatus status, List<ProjectModel> list){
         this(mainQualification,name,quality);
         this.status = status;
         this.id = id;
@@ -65,11 +67,19 @@ public class Developer {
         this.quality = quality;
     }
 
-    public List<Project> getProjects() {
+    public List<ProjectModel> getProjects() {
         return projects;
     }
 
-    public void setProjects(List<Project> projects) {
+    public void setProjects(List<ProjectModel> projects) {
         this.projects = projects;
+    }
+
+    @Override
+    public String toString(){
+        return "\n#" + id + " " + name + "\n"
+                + mainQualification + " | " + quality + "\n"
+                + status + "\n" + "|PROJECTS|\n" +
+                projects;
     }
 }
