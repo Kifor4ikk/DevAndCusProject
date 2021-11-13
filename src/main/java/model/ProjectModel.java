@@ -95,7 +95,7 @@ public class ProjectModel {
     @Override
     public String toString(){
 
-        return "\n-------------------------------\n" +
+        return "\n----------PROJECT---------\n" +
                 "#" + this.id + " " + this.type + "\n" +
                 this.cost + " | " + deadLine + "\n" +
                 "STATUS: " + status + "\n" +

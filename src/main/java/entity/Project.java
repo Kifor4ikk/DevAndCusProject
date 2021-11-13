@@ -1,6 +1,7 @@
 package entity;
 
 import model.CustomerModel;
+import model.RequestModel;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -10,23 +11,26 @@ import java.util.List;
 public class Project {
 
     private long id;
-    private String type;
     private BigDecimal cost;
     private Date deadLine;
     private CustomerModel customer;
     private ProjectStatus status;
     private List<Developer> team;
-    private List<String> tasks;
+    private RequestModel project;
 
     public Project(){}
 
+    public Project(RequestModel requestModel){
+        this.project = requestModel;
+    }
+
     public Project(String type, BigDecimal cost, java.sql.Date deadline, CustomerModel customer, List<String> tasks){
-        this.type = type;
+        this.project.setType(type);
         this.cost = cost;
         this.deadLine = deadline;
         this.customer = customer;
         this.team = new ArrayList<>();
-        this.tasks = tasks;
+        this.project.setTasks(tasks);
         status = ProjectStatus.ACTIVE;
     }
 
@@ -47,11 +51,11 @@ public class Project {
     }
 
     public String getType() {
-        return type;
+        return this.project.getType();
     }
 
     public void setType(String type) {
-        this.type = type;
+        this.project.setType(type);
     }
 
     public BigDecimal getCost() {
@@ -95,22 +99,22 @@ public class Project {
     }
 
     public List<String> getTasks() {
-        return tasks;
+        return this.project.getTasks();
     }
 
     public void setTasks(List<String> tasks) {
-        this.tasks = tasks;
+        this.project.setTasks(tasks);
     }
 
     @Override
     public String toString(){
 
         return "\n-------------------------------\n" +
-                "#" + this.id + " " + this.type + "\n" +
+                "#" + this.id + " " + this.getType() + "\n" +
                 this.cost + " | " + deadLine + "\n" +
                 "STATUS: " + status + "\n" +
                 this.customer + "\n" + team + " \n"
-                + tasks +
+                + this.getTasks() +
                 "\n-------------------------------\n";
     }
 }

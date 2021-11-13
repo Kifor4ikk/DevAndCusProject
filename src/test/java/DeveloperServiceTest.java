@@ -34,9 +34,9 @@ public class DeveloperServiceTest {
     public void newDeveloper() throws SQLException {
         developerService.newDeveloper(
                 (new Developer(
-                        "JAVA",
-                        "Oleg Tabkov",
-                        Qualities.MIDDLE
+                        "C++",
+                        "Miron Queue",
+                        Qualities.STUDENT
                 )
         ));
     }
@@ -58,7 +58,7 @@ public class DeveloperServiceTest {
 
     @Test
     public void addDeveloperToProject() throws SQLException {
-        developerService.addDeveloperToProject(1,1);
+        developerService.addDeveloperToProject(2,1);
     }
 
     @Test
