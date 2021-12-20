@@ -31,19 +31,9 @@ public class ProjectService implements ProjectRepository {
     }
 
     @Override
-    public void createNewProject(Project project) throws SQLException {
-
-        state().execute("INSERT INTO project_entity (cost, name , deadline, status, tasks) VALUES " +
-                "(" +
-                project.getCost() + ","
-                + "'" + project.getType() + "',"
-                + "'" + project.getDeadLine() + "',"
-                + "'" + project.getStatus().name() + "',"
-                + "'" + project.getTasks() + "')");
-
-        long projectId = getProjectByType(project.getType()).getId();
-        state().execute("INSERT INTO customer_projects (projectId, customerId) VALUES ("
-                + projectId + ", " + project.getCustomer().getId() + ")");
+    public void createNewProject(long requestId,Project project) throws SQLException {
+        state().execute("UPDATE project_entity SET cost = " + project.getCost() +
+                ",name = '" + project.getType() + "', deadline = '" + project.getDeadLine() +"', status = 'ACTIVE' WHERE id = " + requestId);
     }
 
     @Override
@@ -112,7 +102,8 @@ public class ProjectService implements ProjectRepository {
                                 resultSet.getDate("deadline"),
                                 customerService.getCustomerModelByProjectId(resultSet.getLong("id")),
                                 ProjectStatus.valueOf(resultSet.getString("status")),
-                                getAllDevModelFromProject(1)
+                                getAllDevModelFromProject(resultSet.getLong("id")),
+                                Collections.singletonList(resultSet.getArray("tasks").toString())
                         )
                 );
             }
@@ -166,15 +157,17 @@ public class ProjectService implements ProjectRepository {
     public RequestModel getRequestById(long id) throws SQLException {
 
         RequestModel requestModel = new RequestModel();
+        requestModel.setId(id);
         try (ResultSet resultSet = state().executeQuery("SELECT * FROM project_entity WHERE id = '" + id + "' AND cost is NULL AND" +
                 " deadline is NULL AND status is NULL");) {
             while (resultSet.next()) {
                 requestModel.setCustomerId(customerService.getCustomerModelByProjectId(resultSet.getLong("id")).getId());
-                requestModel.setType(resultSet.getString("type"));
+                requestModel.setType(resultSet.getString("name"));
                 requestModel.setTasks(Collections.singletonList(resultSet.getArray("tasks").toString()));
             }
         }
         if (requestModel.getId() == 0) throw new NotFoundException("Request with current ID not FOUND");
+
         return requestModel;
     }
 

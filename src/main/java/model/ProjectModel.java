@@ -99,7 +99,8 @@ public class ProjectModel {
                 "#" + this.id + " " + this.type + "\n" +
                 this.cost + " | " + deadLine + "\n" +
                 "STATUS: " + status + "\n" +
-                this.customer + "\n" + team +
+                this.customer + "\n" + team + "\n" +
+                this.tasks +
                 "\n-------------------------------\n";
     }
 }

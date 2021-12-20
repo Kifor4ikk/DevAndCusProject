@@ -2,6 +2,7 @@ package entity;
 
 import model.ProjectModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Developer {
@@ -11,7 +12,7 @@ public class Developer {
     private String name;
     private DeveloperStatus status;
     private Qualities quality;
-    private List<ProjectModel> projects;
+    private List<ProjectModel> projects = new ArrayList<>();;
 
     public Developer(String mainQualification, String name, Qualities quality){
         this.mainQualification = mainQualification;

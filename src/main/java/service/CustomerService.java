@@ -123,14 +123,14 @@ public class CustomerService implements CustomerRepository {
     public CustomerModel getCustomerModelByProjectId(long projectId) throws SQLException {
         CustomerModel customer = new CustomerModel();
         try(ResultSet resultSet = state().executeQuery("select * from customer_projects INNER JOIN" +
-                " customer_entity ON projectId = "+ projectId +" where projectId = " + projectId)){
+                " customer_entity ON projectId = "+ projectId + " where id = customer_projects.customerid")){
             while (resultSet.next()){
                 customer.setId(resultSet.getLong("id"));
                 customer.setName(resultSet.getString("name"));
             }
-            if(customer.getId() == 0){
+            if(customer.getId() == 0)
                 throw new NotFoundException("Project with current ID was not found");
-            }
+
             return customer;
         }
     }

@@ -6,7 +6,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class Logger {
-
     private String pathToLog;
     private BufferedWriter writer;
 

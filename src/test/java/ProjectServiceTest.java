@@ -47,20 +47,6 @@ public class ProjectServiceTest {
 
     @Test
     public void createNewProject() throws SQLException {
-        //String type, BigDecimal cost, java.sql.Date deadline, CustomerModel customer, List<String> tasks
-        List<String> tasks = new ArrayList<>();
-        tasks.add("Create new developers");
-        tasks.add("Created DataBase");
-        tasks.add("Create TESTS");
-        projectService.createNewProject(
-                new Project(
-                        "PticeFabrica",
-                        new BigDecimal("123"),
-                        new Date(2022-1900,0,14),
-                        customerService.getCustomerModelById(1),
-                        tasks
-                )
-        );
     }
 
     @Test

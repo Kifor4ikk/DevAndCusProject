@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ProjectRepository {
 
-    public void createNewProject(Project project) throws SQLException;
+    public void createNewProject(long requestId, Project project) throws SQLException;
     public void setProjectStatus(long id, ProjectStatus status) throws SQLException;
     public ProjectModel getProjectById(long id) throws SQLException;
     public ProjectModel getProjectByType(String name) throws SQLException;

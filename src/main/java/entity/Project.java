@@ -21,6 +21,7 @@ public class Project {
     public Project(){}
 
     public Project(RequestModel requestModel){
+        id = requestModel.getId();
         this.project = requestModel;
     }
 
