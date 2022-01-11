@@ -90,7 +90,6 @@ public class ProjectService implements ProjectRepository {
 
         try (ResultSet resultSet = state().executeQuery("SELECT * FROM project_entity WHERE " +
                 "cost IS NOT NULL AND status IS NOT NULL and deadline IS NOT NULL")) {
-
             //long id, String type, BigDecimal cost, Date deadLine,
             //CustomerModel customer, ProjectStatus status, List<DeveloperModel> listOfDevs, List<String> tasks
             while (resultSet.next()) {
@@ -204,5 +203,32 @@ public class ProjectService implements ProjectRepository {
             }
         }
         return list;
+    }
+
+    public void addProjectsList(List<ProjectModel> list) throws SQLException{
+        for(ProjectModel project : list) {
+            state().execute("INSERT INTO project_entity (id,\"cost\",\"name\",deadline,status,tasks) VALUES ('" +
+                    project.getId() + "', '" +
+                    project.getCost() + "', '" +
+                    project.getType() + "', '" +
+                    project.getDeadLine() + "', '" +
+                    project.getStatus() + "', '" +
+                    project.getTasks() + "')");
+
+            state().execute("INSERT INTO customer_projects (projectId, customerId) VALUES ('" + project.getId() + "','" + project.getCustomer().getId() + "')");
+        }
+    }
+
+    public void addRequestList(List<RequestModel> list) throws SQLException{
+
+        for (RequestModel requestModel : list){
+
+            state().execute("INSERT INTO project_entity (id, name , tasks) VALUES ('" +
+                    requestModel.getId() + "', '" +
+                    requestModel.getType() + "', '" +
+                    requestModel.getTasks() + "')");
+            state().execute("INSERT INTO customer_projects (projectId, customerId) VALUES ("
+                    + requestModel.getId() + ", " + requestModel.getCustomerId() + ")");
+        }
     }
 }

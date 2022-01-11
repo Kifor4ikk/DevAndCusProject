@@ -138,5 +138,26 @@ public class DeveloperService implements DeveloperRepository {
         }
         return list;
     }
+
+    public void addDeveloperList(List<Developer> list) throws SQLException {
+
+        for(Developer developer : list){
+            state().execute("INSERT INTO developer_entity (id,mainqualification,name,status,quality) VALUES ('" +
+                    developer.getId() + "', '" +
+                    developer.getMainQualification() + "', '" +
+                    developer.getName() + "', '" +
+                    developer.getStatus().toString() + "', '" +
+                    developer.getQuality().toString() +
+                    "')");
+
+            for(ProjectModel project : developer.getProjects())
+                state().execute("INSERT INTO developer_projects (developerid, projectid) VALUES ('" + developer.getId() + "', '" + project.getId() + "')");
+        }
+    }
+
+    public void deleteAll() throws SQLException{
+        state().execute("DELETE FROM customer_entity; DELETE FROM project_entity; DELETE FROM developer_entity; DELETE FROM developer_projects;" +
+                "DELETE FROM customer_projects");
+    }
 }
 

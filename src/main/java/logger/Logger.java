@@ -19,9 +19,6 @@ public class Logger {
 
         } catch (FileNotFoundException e) {
             File file = new File(LocalDate.now() + "_log.txt");
-            if (file.createNewFile()) {
-                System.out.println("Test");
-            }
             writer = new BufferedWriter(new FileWriter(file, true));
         } catch (IOException e) {
             e.printStackTrace();

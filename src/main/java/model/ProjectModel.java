@@ -84,8 +84,8 @@ public class ProjectModel {
         this.status = status;
     }
 
-    public List<DeveloperModel> getTeam() {
-        return team;
+    public List<String> getTasks() {
+        return tasks;
     }
 
     public void setTeam(List<DeveloperModel> team) {

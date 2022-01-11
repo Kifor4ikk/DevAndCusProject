@@ -1,8 +1,12 @@
 package ui;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import entity.*;
 import exception.NotFoundException;
 import logger.Logger;
+import model.CustomerModel;
 import model.DeveloperModel;
 import model.ProjectModel;
 import model.RequestModel;
@@ -10,17 +14,16 @@ import service.CustomerService;
 import service.DeveloperService;
 import service.ProjectService;
 
-import java.io.IOException;
-import java.io.NotActiveException;
+import java.io.*;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.sql.SQLOutput;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 public class UI {
 
@@ -36,6 +39,11 @@ public class UI {
         this.projectService = projectService;
     }
 
+    public String getStringFromList(List<String> list){
+        StringBuilder temp = new StringBuilder();
+        for(String x : list) temp.append(x);
+        return temp.toString();
+    }
     public int start() throws IOException {
         logger.setWriter();
         logger.log("App started");
@@ -212,7 +220,7 @@ public class UI {
                 System.out.print("Hello Manager!\n1: Check all requests\n2: Create project from request(by requestID)" +
                         "\n3: Change project status(by projectId)\n4: Check all projects\n5: Check all Developers with status" +
                         "\n6: Add developer to project\n7: Remove developer from project\n8: Change developer status" +
-                        "\n9: Change developer Quality\n10: Decline request(by requestId)\n0: Exit\nEnter: ");
+                        "\n9: Change developer Quality\n10: Decline request(by requestId)\n11: Create new developer\n12: Parse to JSON\n13: Load from JSON\n0: Exit\nEnter: ");
 
                 switch (read.nextInt()) {
                     case 1: {
@@ -442,6 +450,65 @@ public class UI {
                         developerService.newDeveloper(new Developer(mainQuality,name,qualities));
                         break;
                     }
+                    case 12:{
+                        Gson gson = new Gson();
+                        List<Customer> customers = customerService.getAllCustomersWithoutProjects();
+                        List<Developer> developers = developerService.getAllDevelopers();
+                        List<ProjectModel> projects = projectService.getAllProjects();
+                        List<RequestModel> requestModels = projectService.getAllRequests();
+                        File customersFile = new File("customers_" + LocalDate.now() + ".json");
+                        File developersFile = new File("developers_" + LocalDate.now() + ".json");
+                        File projectsFile = new File("projects_" + LocalDate.now() + ".json");
+                        File requestFile = new File("request_" + LocalDate.now() + ".json");
+
+                        BufferedWriter writer =  new BufferedWriter(new FileWriter(customersFile, true));
+                        writer.write(gson.toJson(customers));
+                        writer.close();
+
+                        writer = new BufferedWriter(new FileWriter(developersFile, true));
+                        writer.write(gson.toJson(developers));
+                        writer.close();
+
+                        writer = new BufferedWriter(new FileWriter(projectsFile, true));
+                        writer.write(gson.toJson(projects));
+                        writer.close();
+
+                        writer = new BufferedWriter(new FileWriter(requestFile, true));
+                        writer.write(gson.toJson(requestModels));
+                        writer.close();
+
+                        System.out.println(gson.toJson(customers));
+                        System.out.println(gson.toJson(developers));
+                        System.out.println(gson.toJson(projects));
+                        System.out.println(gson.toJson(requestModels));
+
+                        break;
+                    }
+
+                    case 13:{
+                        Gson gson = new GsonBuilder()
+                                .setLenient()
+                                .create();
+                        System.out.println();
+                        List<Customer> customersList = gson.fromJson(getStringFromList(Files.readAllLines(Paths.get("customersNew.json")))
+                                , new TypeToken<ArrayList<Customer>>(){}.getType());
+
+                        List<ProjectModel> projectsList = gson.fromJson(getStringFromList(Files.readAllLines(Paths.get("projectsNew.json")))
+                                , new TypeToken<ArrayList<ProjectModel>>(){}.getType());
+
+                        List<Developer> developersList = gson.fromJson(getStringFromList(Files.readAllLines(Paths.get("developersNew.json")))
+                                , new TypeToken<ArrayList<Developer>>(){}.getType());
+
+                        List<RequestModel> requestModelsList = gson.fromJson(getStringFromList(Files.readAllLines(Paths.get("requestModelsNew.json")))
+                                , new TypeToken<ArrayList<RequestModel>>(){}.getType());
+
+                        developerService.deleteAll();
+                        customerService.addCustomersList(customersList);
+                        projectService.addProjectsList(projectsList);
+                        developerService.addDeveloperList(developersList);
+                        projectService.addRequestList(requestModelsList);
+                        break;
+                    }
                     case 0: {
                         System.out.println("Exit");
                         isExit = true;
@@ -458,14 +525,11 @@ public class UI {
                 System.err.println(throwable.getCause() + " " + throwable.getMessage());
                 System.err.println(throwable);
                 logger.log("ERROR -> " + throwable.getMessage());
-            } catch (IOException e) {
-                System.err.println(e.getMessage());
-                logger.log("ERROR -> " + e.getMessage());
-            } catch (NotFoundException e) {
+            } catch (IOException | NotFoundException e) {
                 System.err.println(e.getMessage());
                 logger.log("ERROR -> " + e.getMessage());
             } catch (Exception e) {
-                System.err.println(e);
+                System.err.println(e + " XZ");
                 logger.log("DROP APP -> " + e.getMessage());
             }
         }

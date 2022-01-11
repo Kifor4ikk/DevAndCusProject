@@ -1,5 +1,6 @@
 package entity;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collector;
@@ -9,7 +10,7 @@ public class Customer {
 
     private long id;
     private String name;
-    private List<Project> projectList;
+    private List<Project> projectList = new ArrayList<>();
 
     public Customer(){}
 
